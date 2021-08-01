@@ -1,26 +1,47 @@
 import axios from 'axios';
+let stringify = require('qs-stringify');
+require('dotenv').config();
 
-export default axios.post('https://oauth2.elenasport.io/oauth2/token', {
- 
-    body: JSON.stringify({
-        'grant_type':'client_credentials'
-      })
 
-     ,
 
-headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
 
-    Authorization: 'Basic ZmlodW41b205aXJrMDV2b2w4ZmhsN20xczpka3NkanBqa3F1cW5yNWxmZTIxZXJvMGlrajdrbjByZGQwNDNubTZzYWUzNXM0a3JtYWI='
+const getToken = axios.create({
+  baseURL: 'https://oauth2.elenasport.io/oauth2/token',
+  headers:{
+    'Authorization': `${process.env.REACT_APP_API_KEY}`,
+    'Content-Type':'application/x-www-form-urlencoded'
+    }
+}) ;
+
+
+const elenaSports = axios.create({
+    baseURL:'https://football.elenasport.io/v2'
+})
+
+elenaSports.interceptors.request.use(
+  async function(config){
+
+  const cuerpo = stringify({'grant_type':'client_credentials'});
+  
+  const respuesta = await getToken.post('/',cuerpo);
     
+  const TOKEN = respuesta.data.access_token;
     
-}
+  config.headers.Authorization=`Bearer ${TOKEN}`; 
+  
+  return config;
+  
+  },
+  function (config){
+   
+    console.log('Error');
+    
+    return config
+  }
+)
 
-
-}).then(response => {
         
-        console.log(response.data);
-    });
 
+export default elenaSports; 
     
     

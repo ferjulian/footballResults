@@ -1,65 +1,88 @@
 import React from 'react';
-//import elenaSports from '../apis/ElenaSports';
+import elenaSports from '../apis/ElenaSports';
 import GameData from './GameData';
 import GameCtrl from './GameCtrl';
 import messi from '../assets/messi.jpg';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends React.Component {
  
-  state = {correctHome: 0, correctAway:0, info:'', btnMode: true, result:''}
+  state = {matchData:{}, btnMode: true, result:''}
 
-  async componentDidMount(){
-    
-    /*const response = await elenaSports({
-      method:'get',
-      url:'/fixtures'
-      //params: {page: '3'}
-    });
 
-    console.log(response.data.data[0].seasonName);*/
-    }
+  OnButtonClick = async (argumento,userResultHome,userResultAway) => {
 
-    
-    
+    let fixtureNum = Math.floor(Math.random()*(141140-140759+1)+140759);  
 
-    OnButtonClick = (argumento,userResultHome,userResultAway) => {
-      
-
-     const miHome = 3;
-     const miAway = 1;
-     const miInfo = 'Barcelona - Real Madrid, Santiago Bernabeu'
-     
-    //const correctHome = this.state.correctHome;
-    //const correctAway = this.state.correct; 
-     
-        this.setState({correctHome: miHome, correctAway: miAway, info: miInfo, btnMode:false, result:''});
-
-      if(argumento ==='setTrue'){
-        this.setState({btnMode:true});
+      if(argumento !== 'setTrue'){
         
-        if(userResultHome === miHome && userResultAway === miAway){
-          this.setState({result: 'Correcto!'})
-      
-        }else{
-          
-          this.setState({result: 'Fallaste!'});
-      }
+        
 
-     }
+        const response = await elenaSports({
+          method:'get',
+          url: `/fixtures/${fixtureNum}`
+        });
+    
+       let myRequest = response.data.data[0];
+    
+      
+    
+       let matchInfo = {
+         away: myRequest.awayName,
+         home: myRequest.homeName,
+         season: myRequest.seasonName,
+         venue: myRequest.venueName,
+         scoreAway: myRequest.team_away_90min_goals,
+         scoreHome: myRequest.team_home_90min_goals
+        }
+
+        this.setState({btnMode: false, matchData: matchInfo, result:''});
+  
+      }
+      
+      
+      if(argumento ==='setTrue'){
+      this.setState({btnMode:true});
+      
+      if(userResultHome === this.state.matchData.scoreHome && userResultAway === this.state.matchData.scoreAway){
+        this.setState({result: 'Correcto!'})
+    
+      }else{
+        
+        this.setState({result: 'Fallaste!'});
     }
+
+   }
+
+    }
+
 
 
   render(){
         return(
-            <div>
-              <h1>Football App</h1>
-              <img src={messi} style={{width: 500, height:300}} alt="messi"></img>
-              <GameData matchresult={this.state.data} matchinfo={this.state.info} />
-              <button onClick={this.OnButtonClick}>Get</button>
-              <GameCtrl correctHome={this.state.correctHome} correctAway ={this.state.correctAway} btnMode={this.state.btnMode} btnChange={this.OnButtonClick} />  
-              <h1>{this.state.result}</h1>          
-            </div>  
+            <div className="container">
+              <div className="row">
+                    <span className="text-center"><h1>Football App</h1></span>  
+                </div>
+                <div className="row">
+                    <span className="text-center"><img className="img-fluid" src={messi} alt="messi" ></img></span>  
+                </div>
+                <div className="row">
+                  <GameData  matchData={this.state.matchData} />  
+                </div>
+                <div className="row">
+                    
+                    <div className="col text-center"><button onClick={this.OnButtonClick}>Get</button></div>
+                    
+                </div>
+                
+                <GameCtrl correctHome={this.state.correctHome} correctAway ={this.state.correctAway} btnMode={this.state.btnMode} btnChange={this.OnButtonClick} />
+
+              <h1>{this.state.result}</h1>
+
+            </div>
+                        
+           
             
             
         );

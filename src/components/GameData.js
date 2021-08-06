@@ -1,4 +1,5 @@
 import React from 'react'
+import escudo from '../assets/escudo.svg'
 
 class GameData extends React.Component {
 
@@ -9,11 +10,24 @@ class GameData extends React.Component {
 
     render(){
         return (
-            <div>
-                <div>{this.props.matchinfo}</div>
-                <div>{this.props.matchresult}</div>
-            </div>
-        );
+            <div className="text-center">
+
+                <div className="row">
+                <div className="col-3"><img className="escudo" src={escudo} alt="escudo"></img></div>
+                <div className="col-3">{this.props.matchData.scoreHome}</div>
+                <div className="col-3">{this.props.matchData.scoreAway}</div>
+                <div className="col-3"><img className="escudo" src={escudo} alt="escudo"></img></div>
+                </div>
+                <div className="row">
+                <div className="col-3">{this.props.matchData.home}</div>
+                <div className="col-3"></div>
+                <div className="col-3"></div>
+                <div className="col-3">{this.props.matchData.away}</div>
+                </div>
+                <div className="row">
+                    <p>Partido disputado en el torneo {this.props.matchData.season} en el estadio {this.props.matchData.venue}</p>
+                </div>
+            </div>                );
     }
 }
 

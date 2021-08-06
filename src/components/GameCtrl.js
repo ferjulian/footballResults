@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class GameCtrl extends React.Component {
 
@@ -8,8 +9,6 @@ class GameCtrl extends React.Component {
 
         event.preventDefault()
 
-        //const correctResultHome = this.props.correctHome;
-        //const correctResultAway = this.props.correctAway;
         const userResultHome = parseInt(this.state.home);
         const userResultAway = parseInt(this.state.away);
 
@@ -22,20 +21,27 @@ class GameCtrl extends React.Component {
 
     render(){
         return(
-            <div>
-                <form onSubmit ={this.onFormSubmit}>
-                <input onChange={(event) => this.setState({home: event.target.value})} value={this.state.home} disabled={this.props.btnMode} />
-                <input onChange={(event) => this.setState({away: event.target.value})} value={this.state.away} disabled={this.props.btnMode} />
-
+            
+        <div>
+                    
+            <form onSubmit ={this.onFormSubmit}>
+                <div className="row text-center">
                 
+                    <div className="col"><input onChange={(event) => this.setState({home: event.target.value})} value={this.state.home} disabled={this.props.btnMode} placeholder="Home"/></div>
+                    <div className="col"><input onChange={(event) => this.setState({away: event.target.value})} value={this.state.away} disabled={this.props.btnMode} placeholder="Away" /></div>
                 
-                <button disabled={this.props.btnMode}>Enviar</button>
-                </form>
-
+                </div>
+                <div className="row">
+                    
+                    <div className="col text-center"><button disabled={this.props.btnMode}>Enviar</button></div>
+                    
+                </div>
+                   
+            </form>
                 
+        </div>
                 
-            </div>
-        );
+                );
     }
 }
 
